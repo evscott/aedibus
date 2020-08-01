@@ -1,0 +1,9 @@
+.idea
+jenkins-data
+aedibus-challenger.iml
+.vscode
+aedibus-api/.vscode
+aedibus-web-client/node_modules
+marshaller/.vscode
+migrator/node_modules
+node_modules
