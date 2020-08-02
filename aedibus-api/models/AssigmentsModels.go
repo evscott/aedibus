@@ -23,24 +23,8 @@ type CreateAssignmentResponse struct {
 
 /** Get Assignment **/
 
-type GetAssignmentRequest struct {
-	ID string `json:"id"`
-}
-
 type GetAssignmentResponse struct {
 	ID       string `json:"id"`
 	CourseId string `json:"courseId"`
 	Title    string `json:"title"`
-}
-
-/** Get Test Suite **/
-
-type GetTestSuiteRequest struct {
-	ID string `pg:"id"`
-}
-
-/** Get Readme **/
-
-type GetReadmeRequest struct {
-	ID string `pg:"id"`
 }

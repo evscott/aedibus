@@ -64,10 +64,10 @@ func encodeResponseBody(body interface{}, w http.ResponseWriter) error {
 	return json.NewEncoder(w).Encode(body)
 }
 
-func encodeChallengeFormData(uri, challengeID string, attemptContents, testsContents []byte) (*http.Request, error) {
+func postSolutionToJenkins(submissionId string, attemptContents, testsContents []byte) (*http.Request, error) {
 
 	// Get pom.xml contents
-	pomFile, err := os.Open("./challenges/pom.xml")
+	pomFile, err := os.Open("./assignments/pom.xml")
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +85,6 @@ func encodeChallengeFormData(uri, challengeID string, attemptContents, testsCont
 	body := new(bytes.Buffer)
 	writer := multipart.NewWriter(body)
 
-	// Write challengeID string to form
-	err = writer.WriteField("challengeID", challengeID)
-	if err != nil {
-		return nil, err
-	}
-
 	// Write pom.xml, Tests.java, and Attempt.java contents to multipart form-data
 	pomForm, err := writer.CreateFormFile("pom.xml", "pom.xml")
 	if err != nil {
@@ -98,17 +92,21 @@ func encodeChallengeFormData(uri, challengeID string, attemptContents, testsCont
 	}
 	pomForm.Write(pomContents)
 
-	testsForm, err := writer.CreateFormFile("Tests.java", "Tests.java")
+	testsForm, err := writer.CreateFormFile("TestSuite.java", "TestSuite.java")
 	if err != nil {
 		return nil, err
 	}
 	testsForm.Write(testsContents)
 
-	attemptForm, err := writer.CreateFormFile("Attempt.java", "Attempt.java")
+	attemptForm, err := writer.CreateFormFile("Solution.java", "Solution.java")
 	if err != nil {
 		return nil, err
 	}
 	attemptForm.Write(attemptContents)
+
+	if err := writer.WriteField("submissionId", submissionId); err != nil {
+		return nil, err
+	}
 
 	// Close multipart form-data writer
 	err = writer.Close()
@@ -117,7 +115,7 @@ func encodeChallengeFormData(uri, challengeID string, attemptContents, testsCont
 	}
 
 	// Return request
-	request, err := http.NewRequest("POST", uri, body)
+	request, err := http.NewRequest("POST", "http://admin:11afc514a7f5d8be4a638e5dfac9929c83@jenkins:8080/job/java-jobs/buildWithParameters/?token=abc", body)
 	if err != nil {
 		return nil, err
 	}

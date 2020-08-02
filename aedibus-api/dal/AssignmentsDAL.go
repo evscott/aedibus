@@ -20,3 +20,13 @@ func (d *Config) GetAssignments(courseId string) (*[]models.Assignments, error) 
 		Where("course_id = ?", courseId).
 		Select()
 }
+
+/**
+ * Gets an assignment by its ID.
+ */
+func (d *Config) GetAssignment(id string) (*models.Assignments, error) {
+	assignment := &models.Assignments{}
+	return assignment, d.db.Model(assignment).
+		Where("id = ?", id).
+		Select()
+}

@@ -25,9 +25,9 @@ type Failure struct {
 }
 
 type Test struct {
-	ChallengeID string  `pg:"challenge_id"`
-	Name        string  `pg:"name"`
-	Time        float32 `pg:"time,attr"`
-	Message     string  `pg:"message"`
-	Failure     bool    `pg:"failure"`
+	SubmissionId string  `pg:"submission_id"`
+	Name         string  `pg:"name"`
+	Time         float32 `pg:"time"`
+	Message      string  `pg:"message"`
+	Failure      bool    `pg:"failure"`
 }

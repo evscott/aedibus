@@ -1,2 +1,2 @@
-cat target/surefire-reports/TEST-challenges.TestChallenge.xml
-curl -X POST -F "SimpleTest=@target/surefire-reports/TEST-challenges.TestChallenge.xml" marshaller:5050
+cat target/surefire-reports/TEST-assignment.TestSuite.xml
+curl -X POST -F "submissionId=${submissionId}" -F "TestResults=@target/surefire-reports/TEST-assignment.TestSuite.xml" marshaller:5050

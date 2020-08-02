@@ -1,6 +1,6 @@
-package challenges;
+package assignment;
 
-public class Attempt {
+public class Solution {
 
     public static String getHelloWorld(){
         return "hello world";

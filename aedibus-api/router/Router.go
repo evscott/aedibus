@@ -29,6 +29,7 @@ func Init() *Config {
 	c.Routes.Mount("/auth", c.authRoutes())
 	c.Routes.Mount("/courses", c.coursesRoutes())
 	c.Routes.Mount("/assignments", c.assignmentsRoutes())
+	c.Routes.Mount("/submissions", c.submissionsRoutes())
 
 	printRoutes(c.Routes)
 

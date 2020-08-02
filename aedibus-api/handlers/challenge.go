@@ -41,7 +41,7 @@ func (c *Config) CreateChallenge(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
-	err = c.FAL.CreateFile(fal.Tests, challenge.ID, tests)
+	err = c.FAL.CreateFile(fal.TestSuite, challenge.ID, tests)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
@@ -82,7 +82,7 @@ func (c *Config) GetChallengeFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fileType := fal.FileType(val)
-	if fileType != fal.Tests || fileType != fal.README {
+	if fileType != fal.TestSuite || fileType != fal.README {
 		fmt.Printf("Invalid file type\n")
 	}
 
@@ -126,13 +126,13 @@ func (c *Config) AttemptChallenge(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve challenge tests contents
-	testsContents, err := c.FAL.GetFile(fal.Tests, challengeID)
+	testsContents, err := c.FAL.GetFile(fal.TestSuite, challengeID)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
 
 	// Send challenge request to Jenkins
-	request, err := encodeChallengeFormData("http://admin:118b1cf6081be7f5c9ea7e059fce2da332@jenkins:8080/job/java-jobs/buildWithParameters/?token=abc", challengeID, attemptContents, testsContents)
+	request, err := postSolutionToJenkins(challengeID, attemptContents, testsContents)
 	if err != nil {
 		fmt.Print(err)
 	}

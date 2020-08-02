@@ -5,10 +5,10 @@ import (
 	"marshaller/models"
 )
 
-func (d *Config) InsertTests(challengeID string, testCases models.TestCases) error {
+func (d *Config) InsertTests(submissionId string, testCases models.TestCases) error {
 	for _, t := range testCases {
 		test := &models.Test{
-			ChallengeID: challengeID,
+			SubmissionId: submissionId,
 			Name:        t.Name,
 			Time:        t.Time,
 		}
