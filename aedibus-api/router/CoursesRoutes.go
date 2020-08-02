@@ -8,8 +8,10 @@ func (c *Config) coursesRoutes() *chi.Mux {
 
 	// Create Course
 	router.Post(pb(), c.handlers.CreateCourse)
-	// Get Course
-	router.Get(pb(), c.handlers.GetCourses)
+	// Get Taught Courses
+	router.Get(pb(TAUGHT), c.handlers.GetTaughtCourses)
+	// Get Enrolled Courses
+	router.Get(pb(ENROLLED), c.handlers.GetEnrolledCourses)
 	// Get Courses
 	router.Get(pb(ID), c.handlers.GetCourse)
 

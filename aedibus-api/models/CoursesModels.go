@@ -10,6 +10,7 @@ type Courses struct {
 /** Create Course **/
 
 type CreateCourseRequest struct {
+	Title       string   `json:"title"`
 	Description string   `json:"description"`
 	StudentList []string `json:"studentList"`
 }
@@ -29,10 +30,6 @@ type GetCoursesResponse struct {
 }
 
 /** Get Course **/
-
-type GetCourseRequest struct {
-	ID string `json:"id"`
-}
 
 type GetCourseResponse struct {
 	ID          string        `json:"id"`

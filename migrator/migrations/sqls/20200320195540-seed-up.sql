@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Enrollments (
 CREATE TABLE IF NOT EXISTS Assignments (
     id uuid DEFAULT uuid_generate_v1() UNIQUE,
     course_id uuid REFERENCES Courses(id) NOT NULL,
-    name varchar(255) NOT NULL,
+    title varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 

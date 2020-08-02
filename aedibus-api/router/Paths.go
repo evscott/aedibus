@@ -6,8 +6,13 @@ const (
 
 	ID string = "/{id}"
 
+	/** Courses **/
+
+	TAUGHT   string = "/taught"
+	ENROLLED string = "/enrolled"
+
 	/** Assignments **/
 
-	TEST_SUITE  string = "/testsuite"
-	README      string = "/readme"
+	TEST_SUITE string = "/testsuite"
+	README     string = "/readme"
 )
