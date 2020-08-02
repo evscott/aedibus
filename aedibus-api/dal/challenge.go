@@ -1,7 +1,7 @@
 package dal
 
 import (
-	"challenger-api/models"
+	"aedibus-api/models"
 	"fmt"
 )
 

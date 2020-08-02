@@ -1,6 +1,6 @@
 package dal
 
-import "challenger-api/models"
+import "aedibus-api/models"
 
 func (d *Config) CreateUser(user *models.User) error {
 	return d.db.Insert(user)

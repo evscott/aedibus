@@ -1,4 +1,4 @@
-module challenger-api
+module aedibus-api
 
 go 1.12
 

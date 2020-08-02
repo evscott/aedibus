@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"challenger-api/dal"
-	"challenger-api/fal"
+	"aedibus-api/dal"
+	"aedibus-api/fal"
 )
 
 type Config struct {
