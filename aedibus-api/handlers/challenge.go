@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"challenger-api/fal"
-	"challenger-api/models"
+	"aedibus-api/fal"
+	"aedibus-api/models"
 	"fmt"
 	"net/http"
 

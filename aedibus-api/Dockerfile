@@ -10,8 +10,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o challenger-api .
+RUN go build -o aedibus-api .
 
 EXPOSE 2020
 
-CMD ["./challenger-api"]
+CMD ["./aedibus-api"]

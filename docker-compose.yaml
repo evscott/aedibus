@@ -17,15 +17,11 @@ services:
       PGUSER: user
       PGPASSWORD: password
       PUBLICKEY: "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEArxxZm3SFwrzWT2zgaxqG\nh/jxp8AD1dYFG9eT36VM/uv2WS/o9gy/vC4mvWYydGQ1kd48g0hkIN6Mel3ferN8\n3qYGM6fsVDAj6RNL0bVc1v/6DA19weHgjiGwCWM/WkTieD8LUBuzBPFXItPR7l7+\nNDDsox2Z4smW/rzNhLgEkanAqxpJ/no2CfVJmPr3gnmoFKFl0/2e9dONOnNLBYM+\nXD/4cQYP+oXtI2pwaSFphCdAYq/cNdZbFlwJnJyJJ9AJqbgIjyqcgb4fQN+F+X8l\n1/jS7EY/P8z08ape0fOxMd4JYlnXPiWxi8i5FJwKdVZkXlt88rqSvrrsRBHRdYKU\nhnX4h7qX+Yx09Gdcw2Tfi6nocfVFmTJK1kKZyVzokwVoMZI8PDf58QN1zdjTEAZ1\nfhEuIW1bQimEUE9D/gwz7+E0jRZx9jRdARGgtLHg84ZeSlfgEyED7m2wXQImgZ2L\nItroBml8ZoGU7Ja7f/dEcArlKCAVcVjnPOri7AR0cA+nWoN+zoErEmp0UDsVXLcX\nhKh84QrdUKofqCnTGVQo1/WJ6XQQMEfdLKmSBGB7KrNtqsd9chdHiuQMb8s+IOOi\nP+bVuBDnQd5yAl5u0K52kkscDzeRsBHsh7yNRLV+vew+8Rz0ZiFe1X8zTHu5U/Hc\nzmWOqbsovm3BRUg14RasSl0CAwEAAQ==\n-----END PUBLIC KEY-----"
-      PRIVATEKEY: "-----BEGIN RSA PRIVATE KEY-----\n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\n-----END RSA PRIVATE KEY-----"
+      PRIVATEKEY: "-----BEGIN RSA PRIVATE KEY-----\n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\n-----END RSA PRIVATE KEY-----"
     networks:
-      - ac-net
+      - aedibus-net
     ports:
       - 2020:2020
-    depends_on:
-      - jenkins
-    links:
-      - jenkins
     labels:
       kompose.service.type: LoadBalancer
     volumes:
@@ -41,7 +37,7 @@ services:
     environment:
       GET_HOSTS_FROM: dns
     networks:
-      - ac-net
+      - aedibus-net
     ports:
       - 3030:3030
     depends_on:
@@ -57,7 +53,7 @@ services:
     restart: always
     hostname: jenkins
     networks:
-      - ac-net
+      - aedibus-net
     ports:
       - 4040:8080
     depends_on:
@@ -82,7 +78,7 @@ services:
       PGUSER: user
       PGPASSWORD: password
     networks:
-      - ac-net
+      - aedibus-net
     ports:
       - 5050:5050
     depends_on:
@@ -105,7 +101,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - ac-net
+      - aedibus-net
 
   migrator:
     container_name: migrator
@@ -122,7 +118,7 @@ services:
       PGUSER: user
       PGPASSWORD: password
     networks:
-      - ac-net
+      - aedibus-net
     depends_on:
       - db
     links:
@@ -131,5 +127,5 @@ services:
       kompose.service.type: LoadBalancer
 
 networks:
-  ac-net:
+  aedibus-net:
     driver: bridge

@@ -81,7 +81,7 @@ func encodeChallengeFormData(uri, challengeID string, attemptContents, testsCont
 	}
 	pomFile.Close()
 
-	// Open new multipart form-data writer
+	// Auth new multipart form-data writer
 	body := new(bytes.Buffer)
 	writer := multipart.NewWriter(body)
 
