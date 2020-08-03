@@ -1,10 +1,10 @@
 package models
 
 type Courses struct {
-	ID          string `pg:"id"`
-	TeacherId   string `pg:"teacher_id"`
-	Title       string `pg:"title"`
-	Description string `pg:"description"`
+	ID          string `pg:"id",json:"id"`
+	TeacherId   string `pg:"teacher_id",json:"teacherId"`
+	Title       string `pg:"title",json:"title"`
+	Description string `pg:"description",json:"description"`
 }
 
 /** Create Course **/

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom';
 import SignUpForm from './SignUpForm'
 import SignInForm from './SignInForm'
 
@@ -20,9 +19,6 @@ class LandingPage extends Component {
     }
 
     render() {
-        if (this.props.isAuthenticated && !this.props.isFetching)
-            return <Redirect to="/home"/>;
-
         if (this.state.signUp)
             return <SignUpForm toggleSignUp={this.toggleSignUp} handleSignUp={this.props.handleSignUp}/>
         else return <SignInForm toggleSignUp={this.toggleSignUp} handleSignIn={this.props.handleSignIn} />

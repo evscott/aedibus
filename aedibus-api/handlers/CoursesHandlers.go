@@ -14,12 +14,17 @@ func (c *Config) CreateCourse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Requesting CreateCourse")
 
 	userID := r.Context().Value("userID").(string)
+
+	fmt.Printf("Got userID %v, %v\n", userID, r.Body)
+
 	createCourseRequest := &models.CreateCourseRequest{}
 	if err := decodeRequestBody(createCourseRequest, r); err != nil {
 		render.Status(r, 500)
 		render.JSON(w, r, err)
 		return
 	}
+
+	fmt.Printf("Got request: %v\n", createCourseRequest)
 
 	course := &models.Courses{
 		TeacherId:   userID,
@@ -34,6 +39,8 @@ func (c *Config) CreateCourse(w http.ResponseWriter, r *http.Request) {
 		render.JSON(w, r, err)
 		return
 	}
+
+	fmt.Printf("Created course: %v", createCourseRequest)
 
 	// If a student is successfully enrolled, add to list of enrolled students
 	// that is included in the response

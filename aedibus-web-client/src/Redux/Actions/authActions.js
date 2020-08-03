@@ -26,6 +26,8 @@ function signInSuccess(user) {
             id: user.id,
             name: user.name,
             email: user.email,
+            teacher: user.teacher,
+            admin: user.admin
         },
     }
 }
@@ -49,6 +51,8 @@ function signUpSuccess(user) {
             id: user.id,
             name: user.name,
             email: user.email,
+            teacher: user.teacher,
+            admin: user.admin
         },
     }
 }
@@ -68,6 +72,7 @@ function logoutSuccess() {
         isAuthenticated: false,
         isFetching: false,
         user: {
+            id: null,
             firstName: null,
             lastName: null,
             email: null,
@@ -85,7 +90,7 @@ export function SignIn(email, password) {
             password: password,
         }
         
-        fetch('http://127.0.0.1:2020/v1/auth', {
+        fetch('http://127.0.0.1:2020/auth', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -93,7 +98,8 @@ export function SignIn(email, password) {
             body: JSON.stringify(payload),
         }).then((response) => response.json())
         .then((json) => {
-            localStorage.setItem('ac-token', json.token);
+            localStorage.clear();
+            localStorage.setItem('aedibus-api-token', json.token);
             dispatch(signInSuccess(json));
         })
     }
@@ -110,7 +116,7 @@ export function SignUp(name, email, password) {
             password: password,
         }
         
-        fetch('http://127.0.0.1:2020/v1/auth', {
+        fetch('http://127.0.0.1:2020/auth', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -118,16 +124,9 @@ export function SignUp(name, email, password) {
             body: JSON.stringify(payload),
         }).then((response) => response.json())
         .then((json) => {
-            localStorage.setItem('ac-token', json.token);
+            localStorage.clear();
+            localStorage.setItem('aedibus-api-token', json.token);
             dispatch(signUpSuccess(json));
         })
-    }
-}
-
-export function Logout() {
-    return (dispatch) => {
-        dispatch(logoutRequest());
-        dispatch(logoutSuccess());
-        localStorage.removeItem('token');
     }
 }

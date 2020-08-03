@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Dashboard from "./Dashboard";
+import CreateCoursePage from "./CreateCoursePage";
 
 const mapStateToProps = (state) => {
     return {
@@ -11,9 +11,9 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-const DashboardContainer = connect(
+const CreateCoursePageContainer = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Dashboard);
+)(CreateCoursePage);
 
-export default DashboardContainer;
+export default CreateCoursePageContainer;

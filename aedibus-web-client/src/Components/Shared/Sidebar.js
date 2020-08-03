@@ -10,9 +10,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import PropTypes from "prop-types";
+import SchoolIcon from '@material-ui/icons/School';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const drawerWidth = 240;
 
@@ -78,6 +80,31 @@ const Sidebar = (props) => {
     const classes = useStyles();
     const theme = useTheme();
 
+    const handleSignOut = () => {
+        localStorage.removeItem('aedibus-api-token');
+    }
+
+    const dashboard = () => {
+        return (
+            <ListItem key={"Dashboard"} button component={'button'} href="/home">
+                <ListItemIcon><DashboardIcon/></ListItemIcon>
+                <ListItemText primary={"Dashboard"} />
+            </ListItem>
+        )
+    }
+
+    const createCourse = () => {
+        if (isTeacher)
+            return (
+                <List>
+                    <ListItem key={"Create course"} button component={'button'} href="/courses/create">
+                        <ListItemIcon><SchoolIcon/></ListItemIcon>
+                        <ListItemText primary={"Create course"} />
+                    </ListItem>
+                </List>
+            )
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -97,21 +124,15 @@ const Sidebar = (props) => {
                 </div>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+                    <ListItem button key={"Sign out"} onClick={handleSignOut}>
+                        <ListItemIcon><EmojiPeopleIcon/></ListItemIcon>
+                        <ListItemText primary={"Sign out"} />
+                    </ListItem>
                 </List>
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+                    {dashboard()}
+                    {createCourse()}
                 </List>
             </Drawer>
         </div>
@@ -121,6 +142,7 @@ const Sidebar = (props) => {
 Sidebar.propTypes = {
     open: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func.isRequired,
+    isTeacher: PropTypes.bool.isRequired,
 }
 
 export default Sidebar;
