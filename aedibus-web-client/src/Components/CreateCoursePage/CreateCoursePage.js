@@ -175,7 +175,7 @@ class CreateCoursePage extends Component {
                 description: this.state.description,
                 studentList: this.state.enrollmentList,
             })
-        }).then((response) => {
+        }).then(() => {
             this.props.history.push('/home');
         });
     }
@@ -205,7 +205,7 @@ class CreateCoursePage extends Component {
                         <Grid item xs={12} md={8} lg={6}>
                             <TextField
                                 id="standard-basic"
-                                label="Course name"
+                                label="Course title"
                                 fullWidth={true}
                                 placeholder={'Distributed Systems'}
                                 variant={'outlined'}

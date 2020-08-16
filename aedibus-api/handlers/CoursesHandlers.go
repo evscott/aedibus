@@ -67,7 +67,7 @@ func (c *Config) CreateCourse(w http.ResponseWriter, r *http.Request) {
 func (c *Config) GetTaughtCourses(w http.ResponseWriter, r *http.Request) {
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
 
-	fmt.Println("Requesting GetEnrolledCourses")
+	fmt.Println("Requesting GetTaughtCourses")
 	userID := r.Context().Value("userID").(string)
 
 	taughtCourses, err := c.DAL.GetTaughtCourses(userID)
@@ -116,10 +116,8 @@ func (c *Config) GetCourse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	course := &models.Courses{
-		ID: courseId,
-	}
-	if err := c.DAL.GetCourse(course); err != nil {
+	course := &models.GetCourseModel{}
+	if course, err = c.DAL.GetCourse(courseId); err != nil {
 		render.Status(r, 500)
 		render.JSON(w, r, err)
 		return
@@ -134,7 +132,7 @@ func (c *Config) GetCourse(w http.ResponseWriter, r *http.Request) {
 
 	getCourseResponse := &models.GetCourseResponse{
 		ID:          course.ID,
-		TeacherId:   course.TeacherId,
+		TeacherName: course.TeacherName,
 		Title:       course.Title,
 		Description: course.Description,
 		Assignments: *assignments,

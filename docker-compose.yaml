@@ -25,7 +25,7 @@ services:
     labels:
       kompose.service.type: LoadBalancer
     volumes:
-      - assignments:/assignments
+      - assignments:/app/assignments
 
   aedibus-web-client:
     container_name: aedibus-web-client

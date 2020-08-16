@@ -20,18 +20,21 @@ func (c *Config) CreateAssignment(w http.ResponseWriter, r *http.Request) {
 		render.JSON(w, r, err)
 		return
 	}
+
 	title, err := decodeRequestFormText("title", r)
 	if err != nil {
 		render.Status(r, 500)
 		render.JSON(w, r, err)
 		return
 	}
+
 	testSuite, err := decodeRequestFormFile("TestSuite.java", r)
 	if err != nil {
 		render.Status(r, 500)
 		render.JSON(w, r, err)
 		return
 	}
+
 	readme, err := decodeRequestFormFile("README.md", r)
 	if err != nil {
 		render.Status(r, 500)

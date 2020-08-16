@@ -31,8 +31,16 @@ type GetCoursesResponse struct {
 
 /** Get Course **/
 
+type GetCourseModel struct {
+	ID          string `pg:"id"`
+	TeacherName string `pg:"teacher_name"`
+	Title       string `pg:"title"`
+	Description string `pg:"description"`
+}
+
 type GetCourseResponse struct {
 	ID          string        `json:"id"`
+	TeacherName string        `json:"teacherName"`
 	TeacherId   string        `json:"teacher_id"`
 	Title       string        `json:"title"`
 	Description string        `json:"description"`

@@ -17,6 +17,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
 
 const drawerWidth = 240;
 
@@ -59,7 +60,7 @@ const styles = theme => ({
     courseListTitle: {
         margin: theme.spacing(4, 0, 2),
     },
-    dashboardMargins: {
+    viewCoursePageMargins: {
         margin: 20,
     },
     title: {
@@ -67,13 +68,17 @@ const styles = theme => ({
     }
 });
 
-class Dashboard extends Component {
+class ViewCoursePage extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
             open: false,
-            courses: [],
+            courseId: this.props.match.params.cid,
+            title: null,
+            description: null,
+            teacher: null,
+            assignments: [],
         }
 
         this.toggleOpen = this.toggleOpen.bind(this)
@@ -82,28 +87,22 @@ class Dashboard extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            if (this.props.user) {
-                let uri;
-
-                if (this.props.user.teacher)
-                    uri = 'http://127.0.0.1:2020/courses/taught'
-                else
-                    uri = 'http://127.0.0.1:2020/courses/enrolled'
-
-                fetch(uri, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'aedibus-api-token': localStorage.getItem('aedibus-api-token')
-                    },
-                    method: 'GET',
-                }).then((response) => {
-                    console.log("response:", response);
-                    return response.json()
-                })
-                    .then(json => {
-                        this.setState({courses: json.courses})
-                    });
-            }
+            fetch(`http://127.0.0.1:2020/courses/${this.state.courseId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'aedibus-api-token': localStorage.getItem('aedibus-api-token')
+                },
+                method: 'GET',
+            }).then((response) => response.json())
+                .then(json => {
+                    console.log('json: ', json);
+                    this.setState({
+                        title: json.title,
+                        teacherName: json.teacherName,
+                        description: json.description,
+                        assignments: json.assignments,
+                    })
+                });
         }, 100);
     }
 
@@ -114,13 +113,23 @@ class Dashboard extends Component {
     render() {
         const { classes } = this.props;
 
-        const dashboardHeader = () => {
+        const courseTitle = () => {
             return (
-                <div className={classes.dashboardMargins}>
+                <div className={classes.viewCoursePageMargins}>
                     <Grid container>
                         <Grid item xs={12} md={12} lg={12}>
                             <Typography variant="h3" className={classes.title} color={'textPrimary'}>
-                                Dashboard
+                                {this.state.title}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="subtitle2" className={classes.title} color={'textSecondary'}>
+                                Instructor: {this.state.teacherName}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="subtitle1" className={classes.title} color={'textPrimary'}>
+                                {this.state.description}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -128,13 +137,13 @@ class Dashboard extends Component {
             )
         }
 
-        const coursesHeader = () => {
+        const assignmentsHeader = () => {
             return (
-                <div className={classes.dashboardMargins}>
+                <div className={classes.viewCoursePageMargins}>
                     <Grid container>
                         <Grid item xs={12} md={12} lg={12}>
                             <Typography variant="h4" className={classes.title} color={'textSecondary'}>
-                                { this.props.user && this.props.user.teacher ? 'Teaching' : 'Enrolled' }
+                                Assignments
                             </Typography>
                         </Grid>
                     </Grid>
@@ -142,21 +151,35 @@ class Dashboard extends Component {
             )
         }
 
-        const courseList = () => {
+        const noAssignmentsMessage = () => {
             return (
-                <div className={classes.dashboardMargins}>
+                <Fragment>
+                    <ListItem>
+                        <ListItemText secondary={'No assignments yet.'}/>
+                    </ListItem>
+                    <ListItem button component={'button'} href={'/courses/assignments/create'}>
+                        <ListItemText primary={'Create one?'}/>
+                    </ListItem>
+                </Fragment>
+            )
+        }
+
+        const assignmentList = () => {
+            return (
+                <div className={classes.viewCoursePageMargins}>
                     <Grid container>
                         <Grid item md={2} lg={3}/>
                         <Grid item xs={12} md={8} lg={6}>
                             <Paper elevation={3}>
                                 <List className={classes.courseList}>
-                                    {this.state.courses.map((course) => (
-                                        <Fragment key={course.ID}>
-                                            <ListItem key={course.ID} button component={'button'} href={`/courses/view/${course.ID}`}>
+                                    {this.state.assignments.length === 0 ? noAssignmentsMessage() : null}
+                                    {this.state.assignments.map((assignment) => (
+                                        <Fragment key={assignment.ID}>
+                                            <ListItem key={assignment.ID} button>
                                                 <ListItemIcon>
-                                                    <SchoolIcon />
+                                                    <GroupWorkIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={course.Title} secondary={course.Description}/>
+                                                <ListItemText primary={assignment.Title}/>
                                             </ListItem>
                                             <Divider light/>
                                         </Fragment>
@@ -170,10 +193,10 @@ class Dashboard extends Component {
             );
         }
 
-        const createCourseButton = () => {
+        const createAssignmentButton = () => {
             if (this.props.user && this.props.user.teacher)
                 return (
-                    <Button href='/courses/create'>
+                    <Button href='/courses/assignments/create'>
                         <Fab className={classes.fab} color="primary">
                             <AddIcon />
                         </Fab>
@@ -188,18 +211,18 @@ class Dashboard extends Component {
                 <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
                     <div className={classes.drawerHeader} />
-                    {dashboardHeader()}
-                    {coursesHeader()}
-                    {courseList()}
-                    {createCourseButton()}
+                    {courseTitle()}
+                    {assignmentsHeader()}
+                    {assignmentList()}
+                    {createAssignmentButton()}
                 </main>
             </div>
         )
     }
 }
 
-Dashboard.propTypes = {
+ViewCoursePage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(ViewCoursePage);

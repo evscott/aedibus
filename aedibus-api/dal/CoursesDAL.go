@@ -36,10 +36,22 @@ func (d *Config) CreateEnrollment(courseId, studentEmail string) error {
 /**
  * Gets a course by its ID
  */
-func (d *Config) GetCourse(course *models.Courses) error {
-	return d.db.Model(course).
-		WherePK().
-		Select()
+func (d *Config) GetCourse(courseId string) (*models.GetCourseModel, error) {
+	getCourseModel := &models.GetCourseModel{}
+	res, err := d.db.
+		Query(getCourseModel,
+		"SELECT c.id, u.name as teacher_name, c.title, c.description " +
+			"FROM courses AS c, users AS u " +
+			"WHERE c.id = ? " +
+			"AND u.id = c.teacher_id ", courseId)
+
+	fmt.Printf("GetCourse result: %v\n%v\n%v\n", getCourseModel, res, err)
+
+	if res == nil {
+		return nil, fmt.Errorf("unknown error getting course %s", courseId)
+	}
+
+	return getCourseModel, err
 }
 
 /**

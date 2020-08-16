@@ -4,6 +4,7 @@ import LandingPageContainer from './LandingPage/LandingPageContainer'
 import DashboardContainer from './Dashboard/DashboardContainer';
 import CreateCoursePageContainer from "./CreateCoursePage/CreateCoursePageContainer";
 import CreateAssignmentPageContainer from "./CreateAssignmentPage/CreateAssignmentPageContainer";
+import ViewCoursePageContainer from "./ViewCoursePage/ViewCoursePageContainer";
 
 const AuthenticatedRoute = ({ component: Component, ...rest}) => {
     return <Route
@@ -23,7 +24,8 @@ export default () => (
     <Switch>
         <UnauthenticatedRoute exact path={'/'} component={LandingPageContainer} />
         <AuthenticatedRoute exact path={'/home'} component={DashboardContainer} />
+        <AuthenticatedRoute exact path={'/courses/view/:cid'} component={ViewCoursePageContainer} />
         <AuthenticatedRoute exact path={'/courses/create'} component={CreateCoursePageContainer} />
-        <AuthenticatedRoute exact path={'/courses/assignment/create'} component={CreateAssignmentPageContainer} />
+        <AuthenticatedRoute exact path={'/courses/assignments/create'} component={CreateAssignmentPageContainer} />
     </Switch>
 )
