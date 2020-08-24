@@ -13,6 +13,13 @@ func (d *Config) GetUserByEmailAndPassword(user *models.User) error {
 		Select()
 }
 
+func (d *Config) GetUserById(id string) (*models.User, error) {
+	user := &models.User{}
+	return user, d.db.Model(user).
+		Where("id = ?", id).
+		Select()
+}
+
 func (d *Config) DeleteUser(user *models.User) error {
 	_, err := d.db.Model(user).WherePK().Delete()
 	return err

@@ -2,24 +2,19 @@ import React, {Component, Fragment} from 'react'
 import clsx from 'clsx';
 import PropTypes from 'prop-types'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import CheckIcon from '@material-ui/icons/Check';
 import Fab from "@material-ui/core/Fab";
-import Button from "@material-ui/core/Button";
-import {Header, Sidebar} from "../Shared";
+import {Footer, Header, Sidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from "@material-ui/core/IconButton";
-import InputBase from "@material-ui/core/InputBase";
-import fetch from "cross-fetch";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -30,8 +25,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import SendIcon from '@material-ui/icons/Send';
 import TextField from "@material-ui/core/TextField";
-import AddIcon from "@material-ui/icons/Add";
 import DoneIcon from '@material-ui/icons/Done';
+import {createCourse} from "../../Services/AedibusAPI";
 
 const drawerWidth = 240;
 
@@ -74,7 +69,7 @@ const styles = theme => ({
     testSuiteTitle: {
         margin: theme.spacing(4, 0, 2),
     },
-    enrollmentListTitle: {
+    studentListTitle: {
         margin: theme.spacing(4, 0, 2),
     },
     enrollmentInputRoot: {
@@ -118,7 +113,7 @@ class CreateCoursePage extends Component {
             open: false,
             title: "",
             description: "",
-            enrollmentList: [],
+            studentList: [],
             enrollmentValue: "",
         }
 
@@ -151,33 +146,21 @@ class CreateCoursePage extends Component {
 
     removeEnrollment(email) {
         this.setState({
-            enrollmentList: this.state.enrollmentList.filter(e => e !== email)
+            studentList: this.state.studentList.filter(e => e !== email)
         });
     }
 
     addEnrollment() {
-        if (!this.state.enrollmentList.includes(this.state.enrollmentValue))
+        if (!this.state.studentList.includes(this.state.enrollmentValue))
             this.setState( {
-                enrollmentList: this.state.enrollmentList.concat(this.state.enrollmentValue),
+                studentList: this.state.studentList.concat(this.state.enrollmentValue),
                 enrollmentValue: "",
             })
     }
 
-    createCourse() {
-        fetch('http://127.0.0.1:2020/courses', {
-            headers: {
-                'Content-Type': 'application/json',
-                'aedibus-api-token': localStorage.getItem('aedibus-api-token')
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                title: this.state.title,
-                description: this.state.description,
-                studentList: this.state.enrollmentList,
-            })
-        }).then(() => {
-            this.props.history.push('/home');
-        });
+    async createCourse() {
+        await createCourse(this.state.title, this.state.description, this.state.studentList)
+        this.props.history.push('/home');
     }
 
     render() {
@@ -292,7 +275,7 @@ class CreateCoursePage extends Component {
             )
         }
 
-        const enrollmentList = () => {
+        const studentList = () => {
             return (
                 <div className={classes.createCourseFormMargin}>
                     <Grid container>
@@ -300,7 +283,7 @@ class CreateCoursePage extends Component {
                         <Grid item xs={12} md={8} lg={6}>
                             <Paper elevation={3}>
                                 <List>
-                                    {this.state.enrollmentList.map((email, i) => (
+                                    {this.state.studentList.map((email, i) => (
                                         <Fragment key={i}>
                                             { i > 0 ? <Divider/> : null }
                                             <ListItem>
@@ -349,9 +332,10 @@ class CreateCoursePage extends Component {
                     {detailsForm()}
                     {enrollmentHeader()}
                     {enrollmentInviteForm()}
-                    {enrollmentList()}
+                    {studentList()}
                     {createCourseButton()}
                 </main>
+                <Footer/>
             </div>
         )
     }

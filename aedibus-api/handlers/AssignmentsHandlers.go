@@ -149,3 +149,24 @@ func (c *Config) GetReadme(w http.ResponseWriter, r *http.Request) {
 
 	render.Data(w, r, readme)
 }
+
+func (c *Config) GetParticipationList(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Requesting GetParticipationList")
+
+	assignmentId, err := getURLQuery("id", r)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	participationList, err := c.DAL.GetAssignmentParticipation(assignmentId)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, participationList)
+}

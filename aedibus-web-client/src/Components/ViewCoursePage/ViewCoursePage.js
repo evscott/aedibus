@@ -6,18 +6,17 @@ import Grid from '@material-ui/core/Grid'
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Header, Sidebar} from "../Shared";
+import {Footer, Header, Sidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
-import fetch from "cross-fetch";
 import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
-import SchoolIcon from '@material-ui/icons/School';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import {getCourse} from "../../Services/AedibusAPI";
 
 const drawerWidth = 240;
 
@@ -74,7 +73,6 @@ class ViewCoursePage extends Component {
 
         this.state = {
             open: false,
-            courseId: this.props.match.params.cid,
             title: null,
             description: null,
             teacher: null,
@@ -86,23 +84,14 @@ class ViewCoursePage extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            fetch(`http://127.0.0.1:2020/courses/${this.state.courseId}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'aedibus-api-token': localStorage.getItem('aedibus-api-token')
-                },
-                method: 'GET',
-            }).then((response) => response.json())
-                .then(json => {
-                    console.log('json: ', json);
-                    this.setState({
-                        title: json.title,
-                        teacherName: json.teacherName,
-                        description: json.description,
-                        assignments: json.assignments,
-                    })
-                });
+        setTimeout(async () => {
+            let res = await getCourse(this.props.match.params.cid);
+            this.setState({
+                title: res.title,
+                teacherName: res.teacherName,
+                description: res.description,
+                assignments: res.assignments
+            });
         }, 100);
     }
 
@@ -175,7 +164,7 @@ class ViewCoursePage extends Component {
                                     {this.state.assignments.length === 0 ? noAssignmentsMessage() : null}
                                     {this.state.assignments.map((assignment) => (
                                         <Fragment key={assignment.ID}>
-                                            <ListItem key={assignment.ID} button>
+                                            <ListItem key={assignment.ID} button component={'button'} href={`/courses/assignments/view/${assignment.ID}`}>
                                                 <ListItemIcon>
                                                     <GroupWorkIcon />
                                                 </ListItemIcon>
@@ -216,6 +205,7 @@ class ViewCoursePage extends Component {
                     {assignmentList()}
                     {createAssignmentButton()}
                 </main>
+                {/*<Footer/>*/}
             </div>
         )
     }

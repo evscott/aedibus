@@ -10,8 +10,9 @@ import (
 type FileType string
 
 const (
-	README     FileType = "README.md"
-	TestSuite  FileType = "TestSuite.java"
+	README    FileType = "README.md"
+	TestSuite FileType = "TestSuite.java"
+	Solution  FileType = "Solution.java"
 )
 
 type Config struct{}
@@ -30,8 +31,8 @@ func (c *Config) GetFile(fileType FileType, assignmentId string) ([]byte, error)
 		return nil, err
 	}
 
-	readme := make([]byte, f.Size)
-	_, err = f.Read(readme)
+	file := make([]byte, f.Size)
+	_, err = f.Read(file)
 	if err != nil {
 		fmt.Printf("error reading the file")
 		return nil, err
@@ -43,7 +44,35 @@ func (c *Config) GetFile(fileType FileType, assignmentId string) ([]byte, error)
 		return nil, err
 	}
 
-	return readme, nil
+	return file, nil
+}
+
+func (c *Config) GetSolution(submissionId, assignmentId string) ([]byte, error) {
+	ctx := context.Background()
+
+	fmt.Printf("Gonna open ./assignments/%s/%s.java\n", assignmentId, submissionId);
+
+	local := storage.Local(fmt.Sprintf("./assignments/%s", assignmentId))
+	f, err := local.Open(ctx, fmt.Sprintf("%s.java", submissionId))
+	if err != nil {
+		fmt.Printf("error opening file")
+		return nil, err
+	}
+
+	file := make([]byte, f.Size)
+	_, err = f.Read(file)
+	if err != nil {
+		fmt.Printf("error reading the file")
+		return nil, err
+	}
+
+	err = f.Close()
+	if err != nil {
+		fmt.Printf("error closing the file")
+		return nil, err
+	}
+
+	return file, nil
 }
 
 func (c *Config) CreateFile(fileType FileType, assignmentId string, file []byte) error {
@@ -89,8 +118,6 @@ func (c *Config) CreateSolution(assignmentId, submissionsId string, file []byte)
 
 	return nil
 }
-
-
 
 func (c *Config) DeleteFile(fileType FileType, assignmentId string) error {
 	ctx := context.Background()

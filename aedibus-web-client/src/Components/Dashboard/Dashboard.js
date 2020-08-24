@@ -6,9 +6,8 @@ import Grid from '@material-ui/core/Grid'
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Header, Sidebar} from "../Shared";
+import {Footer, Header, Sidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
-import fetch from "cross-fetch";
 import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
@@ -17,6 +16,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import {getCoursesForStudent, getCoursesForTeacher} from "../../Services/AedibusAPI";
 
 const drawerWidth = 240;
 
@@ -60,7 +60,7 @@ const styles = theme => ({
         margin: theme.spacing(4, 0, 2),
     },
     dashboardMargins: {
-        margin: 20,
+        margin: -0,
     },
     title: {
         textAlign: 'center',
@@ -73,7 +73,7 @@ class Dashboard extends Component {
 
         this.state = {
             open: false,
-            courses: [],
+            courseList: [],
         }
 
         this.toggleOpen = this.toggleOpen.bind(this)
@@ -81,28 +81,16 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
+        setTimeout(async () => {
             if (this.props.user) {
-                let uri;
+                let courseList;
 
-                if (this.props.user.teacher)
-                    uri = 'http://127.0.0.1:2020/courses/taught'
-                else
-                    uri = 'http://127.0.0.1:2020/courses/enrolled'
-
-                fetch(uri, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'aedibus-api-token': localStorage.getItem('aedibus-api-token')
-                    },
-                    method: 'GET',
-                }).then((response) => {
-                    console.log("response:", response);
-                    return response.json()
-                })
-                    .then(json => {
-                        this.setState({courses: json.courses})
-                    });
+                if (this.props.user.teacher) {
+                    courseList = await getCoursesForTeacher();
+                } else {
+                    courseList = await getCoursesForStudent()
+                }
+                this.setState({courseList: courseList.courses})
             }
         }, 100);
     }
@@ -134,7 +122,7 @@ class Dashboard extends Component {
                     <Grid container>
                         <Grid item xs={12} md={12} lg={12}>
                             <Typography variant="h4" className={classes.title} color={'textSecondary'}>
-                                { this.props.user && this.props.user.teacher ? 'Teaching' : 'Enrolled' }
+                                Course List
                             </Typography>
                         </Grid>
                     </Grid>
@@ -150,7 +138,7 @@ class Dashboard extends Component {
                         <Grid item xs={12} md={8} lg={6}>
                             <Paper elevation={3}>
                                 <List className={classes.courseList}>
-                                    {this.state.courses.map((course) => (
+                                    {this.state.courseList.map((course) => (
                                         <Fragment key={course.ID}>
                                             <ListItem key={course.ID} button component={'button'} href={`/courses/view/${course.ID}`}>
                                                 <ListItemIcon>
@@ -193,6 +181,7 @@ class Dashboard extends Component {
                     {courseList()}
                     {createCourseButton()}
                 </main>
+                {/*<Footer/>*/}
             </div>
         )
     }

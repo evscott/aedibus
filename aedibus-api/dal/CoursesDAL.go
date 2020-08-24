@@ -45,8 +45,6 @@ func (d *Config) GetCourse(courseId string) (*models.GetCourseModel, error) {
 			"WHERE c.id = ? " +
 			"AND u.id = c.teacher_id ", courseId)
 
-	fmt.Printf("GetCourse result: %v\n%v\n%v\n", getCourseModel, res, err)
-
 	if res == nil {
 		return nil, fmt.Errorf("unknown error getting course %s", courseId)
 	}

@@ -41,7 +41,6 @@ type GetCourseModel struct {
 type GetCourseResponse struct {
 	ID          string        `json:"id"`
 	TeacherName string        `json:"teacherName"`
-	TeacherId   string        `json:"teacher_id"`
 	Title       string        `json:"title"`
 	Description string        `json:"description"`
 	Assignments []Assignments `json:"assignments"`

@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignInForm(props) {
     const history = useHistory()
-    const { toggleSignUp, handleSignIn } = props
+    const { toggleSignUp, signIn } = props
     const classes = useStyles()
 
     const [email, setEmail] = React.useState('');
@@ -46,6 +46,11 @@ export default function SignInForm(props) {
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value)
+    }
+
+    const handleSignIn = () => {
+        signIn(email, password)
+        history.push("/home");
     }
 
     return (
@@ -95,7 +100,7 @@ export default function SignInForm(props) {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={() => handleSignIn(email, password)}
+                        onClick={handleSignIn}
                     >
                         Sign In
                     </Button>

@@ -80,8 +80,7 @@ function logoutSuccess() {
     }
 }
 
-export function SignIn(email, password) {
-    console.log('signing in with', email, password)
+export function signIn(email, password) {
     return (dispatch) => {
         dispatch(signInRequest());
 
@@ -98,15 +97,13 @@ export function SignIn(email, password) {
             body: JSON.stringify(payload),
         }).then((response) => response.json())
         .then((json) => {
-            localStorage.clear();
             localStorage.setItem('aedibus-api-token', json.token);
             dispatch(signInSuccess(json));
         })
     }
 }
 
-export function SignUp(name, email, password) {
-    console.log('signing up with', name, email, password)
+export function signUp(name, email, password) {
     return (dispatch) => {
         dispatch(signUpRequest());
 
@@ -124,9 +121,16 @@ export function SignUp(name, email, password) {
             body: JSON.stringify(payload),
         }).then((response) => response.json())
         .then((json) => {
-            localStorage.clear();
             localStorage.setItem('aedibus-api-token', json.token);
             dispatch(signUpSuccess(json));
         })
+    }
+}
+
+export function signOut() {
+    return (dispatch) => {
+        dispatch(logoutRequest())
+        localStorage.removeItem('aedibus-api-token');
+        dispatch(logoutSuccess())
     }
 }

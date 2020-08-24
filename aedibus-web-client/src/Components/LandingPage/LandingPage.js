@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import SignUpForm from './SignUpForm'
 import SignInForm from './SignInForm'
 
+
 class LandingPage extends Component {
     constructor(props) {
         super(props)
@@ -18,16 +19,18 @@ class LandingPage extends Component {
         this.setState({ signUp: !this.state.signUp })
     }
 
+
+
     render() {
         if (this.state.signUp)
-            return <SignUpForm toggleSignUp={this.toggleSignUp} handleSignUp={this.props.handleSignUp}/>
-        else return <SignInForm toggleSignUp={this.toggleSignUp} handleSignIn={this.props.handleSignIn} />
+            return <SignUpForm toggleSignUp={this.toggleSignUp} signUp={this.props.signUp}/>
+        else return <SignInForm toggleSignUp={this.toggleSignUp} signIn={this.props.signIn} />
     }
 }
 
 LandingPage.propTypes = {
-    handleSignUp: PropTypes.func.isRequired,
-    handleSignIn: PropTypes.func.isRequired,
+    signIn: PropTypes.func.isRequired,
+    signUp: PropTypes.func.isRequired,
 }
 
 export default (LandingPage)

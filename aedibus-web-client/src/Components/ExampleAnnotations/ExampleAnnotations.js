@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import CheckIcon from '@material-ui/icons/Check';
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Footer, Header, Sidebar} from "../Shared";
+import {Header, Sidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -19,11 +19,11 @@ import "ace-builds/src-noconflict/theme-tomorrow";
 import "ace-builds/src-noconflict/ext-language_tools"
 import "ace-builds/src-noconflict/snippets/java";
 import TextField from "@material-ui/core/TextField";
+import fetch from "cross-fetch";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
-import {createAssignment, getCoursesForTeacher} from "../../Services/AedibusAPI";
 
 const drawerWidth = 240;
 
@@ -103,7 +103,7 @@ const styles = theme => ({
     },
 });
 
-class CreateAssignmentPage extends Component {
+class ExampleAnnotations extends Component {
     constructor(props) {
         super(props)
 
@@ -111,8 +111,8 @@ class CreateAssignmentPage extends Component {
             open: false,
             readmeValue: "Include some instructions in **markdown** format",
             readmeTab: "write",
-            testSuiteValue: "public class TestSuite {\n    public static void main(String []args) {\n\n    }\n}",
-            courseList: [],
+            testSuiteValue: "package assignment;\n\npublic class Solution {\n\n    public static String getHelloWorld(){\n        return \"hello world\";\n    }\n\n    public static int getNumber10(){\n        return -1;\n    }\n}",
+            courses: [],
             selectedCourse: {
                 ID: "",
                 TeacherID: "",
@@ -124,20 +124,22 @@ class CreateAssignmentPage extends Component {
 
         this.handleCourseChange = this.handleCourseChange.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
-        this.handleTitleChange = this.handleTitleChange.bind(this);
-        this.toggleReadmeTab = this.toggleReadmeTab.bind(this);
-        this.handleReadmeChange = this.handleReadmeChange.bind(this);
         this.handleTestSuiteChange = this.handleTestSuiteChange.bind(this);
-        this.handleCreation = this.handleCreation.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this)
     }
 
     componentDidMount() {
-        setTimeout(async () => {
-            let courseList = await getCoursesForTeacher();
-            // TODO handle err
-            // TODO update getCoursesForTeacher endpoint to just return the list
-            this.setState({courseList: courseList.courses})
+        setTimeout(() => {
+            fetch('http://127.0.0.1:2020/courses/taught', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'aedibus-api-token': localStorage.getItem('aedibus-api-token')
+                },
+                method: 'GET',
+            }).then((response) => response.json())
+                .then(json => {
+                    this.setState({courses: json.courses})
+                });
         }, 100);
     }
 
@@ -150,90 +152,12 @@ class CreateAssignmentPage extends Component {
         this.setState({open: !this.state.open});
     };
 
-    handleTitleChange(title) {
-        this.setState({title: title.target.value});
-    }
-
-    toggleReadmeTab() {
-        this.setState({
-            readmeTab: this.state.readmeTab === "write" ? "preview" : "write",
-        })
-    }
-
-    handleReadmeChange(newValue) {
-        this.setState({readmeValue: newValue})
-    }
-
     handleTestSuiteChange(newValue) {
         this.setState({testSuiteValue: newValue});
     }
 
-    async handleCreation() {
-        let res = await createAssignment(this.state.selectedCourse.ID, this.state.title, this.state.testSuiteValue, this.state.readmeValue);
-        this.props.history.push(`/courses/assignments/view/${res.ID}`);
-    }
-
     render() {
         const { classes } = this.props;
-
-        const converter = new Showdown.Converter({
-            tables: true,
-            simplifiedAutoLink: true,
-            strikethrough: true,
-            tasklists: true
-        });
-
-        const titleForm = () => {
-            return (
-                <div className={classes.createCourseFormMargin}>
-                    <Grid container>
-                        <Grid item md={2} lg={3}/>
-                        <Grid item xs={12} md={8} lg={6}>
-                            <TextField
-                                id="standard-basic"
-                                label="Assignment title"
-                                fullWidth={true}
-                                placeholder={'Assignment 1: Alternative Representation of Numbers'}
-                                variant={'outlined'}
-                                onChange={this.handleTitleChange}
-                            />
-                        </Grid>
-                        <Grid item md={2} lg={3}/>
-                    </Grid>
-                </div>
-            )
-        }
-
-        const courseSelect = () => {
-            return (
-                <div className={classes.createCourseFormMargin}>
-                    <Grid container>
-                        <Grid item md={3} lg={4}/>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <FormControl className={classes.formControl} fullWidth={true}>
-                                <InputLabel id="demo-simple-select-label">Course</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={this.state.selectedCourse}
-                                    onChange={this.handleCourseChange}
-                                >
-                                    {displayCourseList()}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item md={3} lg={4}/>
-                    </Grid>
-                </div>
-            )
-        }
-
-        const displayCourseList = () => {
-            if (this.state.courseList.length > 0) {
-                return this.state.courseList.map((course, i) => <MenuItem key={i} value={course}>{course.Title}</MenuItem>);
-            } else
-                return null;
-        }
 
         const createAssignmentHeader = () => {
             return (
@@ -241,21 +165,7 @@ class CreateAssignmentPage extends Component {
                     <Grid container>
                         <Grid item xs={12} md={12} lg={12}>
                             <Typography variant="h3" className={classes.title} color={'textPrimary'}>
-                                Create Assignment
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </div>
-            )
-        }
-
-        const readmeHeader = () => {
-            return (
-                <div className={classes.createAssignmentMargin}>
-                    <Grid container>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h4" className={classes.title} color={'textSecondary'}>
-                                README.md
+                                Example annotations
                             </Typography>
                         </Grid>
                     </Grid>
@@ -277,27 +187,32 @@ class CreateAssignmentPage extends Component {
             )
         }
 
-        const readmeEditor = () => {
-            return (
-                <div className={classes.createAssignmentMargin}>
-                    <Grid container>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Paper elevation={3}>
-                                <ReactMde
-                                    value={this.state.readmeValue}
-                                    onChange={this.handleReadmeChange}
-                                    selectedTab={this.state.readmeTab}
-                                    onTabChange={this.toggleReadmeTab}
-                                    generateMarkdownPreview={markdown =>
-                                        Promise.resolve(converter.makeHtml(markdown))
-                                    }
-                                />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </div>
-            );
-        }
+        const annotations = [
+            {
+                row: 0,
+                column: 4,
+                text: "Generally, it is good practice to document your code with authorship and a date.\nIdeally, this is done above any import statements. Consider this for next time.",
+                type: "warning"
+            },
+            {
+                row: 5,
+                column: 4,
+                text: "This is good! You are returning the correct value.",
+                type: "info"
+            },
+            {
+                row: 9,
+                column: 4,
+                text: "Think about why this might be going wrong. Why are you returning -1?",
+                type: "error"
+            },
+        ];
+
+        let markers = [
+            {startRow: 0, startCol: 0, endRow: 0, endCol: 50, className: classes.replacementMarker, type: 'text' },
+            {startRow: 5, startCol: 0, endRow: 5, endCol: 50, className: classes.replacementMarker, type: 'text' },
+            {startRow: 9, startCol: 0, endRow: 9, endCol: 50, className: classes.replacementMarker, type: 'text' }
+        ];
 
         const testSuiteEditor = () => {
             return (
@@ -322,20 +237,14 @@ class CreateAssignmentPage extends Component {
                                         showLineNumbers: true,
                                         tabSize: 4,
                                     }}
+                                    annotations={annotations}
+                                    markers={markers}
                                 />
                             </Paper>
                         </Grid>
                     </Grid>
                 </div>
             );
-        }
-
-        const createAssignmentButton = () => {
-            return (
-                <Fab className={classes.fab} color="primary" onClick={this.handleCreation}>
-                    <CheckIcon />
-                </Fab>
-            )
         }
 
         return (
@@ -346,22 +255,16 @@ class CreateAssignmentPage extends Component {
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
                     <div className={classes.drawerHeader} />
                     {createAssignmentHeader()}
-                    {courseSelect()}
-                    {titleForm()}
-                    {readmeHeader()}
-                    {readmeEditor()}
                     {testSuiteHeader()}
                     {testSuiteEditor()}
-                    {createAssignmentButton()}
                 </main>
-                {/*<Footer/>*/}
             </div>
         )
     }
 }
 
-CreateAssignmentPage.propTypes = {
+ExampleAnnotations.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CreateAssignmentPage);
+export default withStyles(styles)(ExampleAnnotations);

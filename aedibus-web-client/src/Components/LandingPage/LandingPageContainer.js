@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import LandingPage from "./LandingPage";
-import { SignIn, SignUp } from '../../Redux/Actions/authActions'
+import { signIn, signUp } from '../../Redux/Actions/authActions'
 
 
 const mapStateToProps = (state) => {
@@ -12,11 +12,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSignIn: (email, password) => {
-            dispatch(SignIn(email, password));
+        signIn: (email, password) => {
+            dispatch(signIn(email, password));
         },
-        handleSignUp: (name, email, password) => {
-            dispatch(SignUp(name, email, password));
+        signUp: (name, email, password) => {
+            dispatch(signUp(name, email, password));
         },
     };
 };

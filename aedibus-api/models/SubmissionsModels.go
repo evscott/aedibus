@@ -6,15 +6,20 @@ type Submissions struct {
 	StudentId    string `pg:"student_id"`
 }
 
-type CreateSubmissionResponse struct {
+type CreateSubmissionResultsResponse struct {
 	ID           string `json:"id"`
 	AssignmentId string `json:"assignment_id"`
 	StudentId    string `json:"student_id"`
 }
 
 type GetSubmissionResponse struct {
-	ID           string  `json:"id"`
-	AssignmentId string  `json:"assignmentId"`
-	StudentId    string  `json:"studentId"`
-	TestResults  []Tests `json:"testResults"`
+	ID           string `json:"id"`
+	AssignmentId string `json:"assignmentId"`
+	StudentId    string `json:"studentId"`
+	UserID       string `json:"userId"`
+	UserName     string `json:"userName"`
+}
+
+type GetSubmissionResultsResponse struct {
+	TestResults []Tests `json:"testResults"`
 }

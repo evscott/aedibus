@@ -14,7 +14,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import PropTypes from "prop-types";
 import SchoolIcon from '@material-ui/icons/School';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const drawerWidth = 240;
 
@@ -76,13 +75,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Sidebar = (props) => {
-    const { open, toggleOpen, isTeacher } = props;
+    const { open, toggleOpen, isTeacher, signOut } = props;
     const classes = useStyles();
     const theme = useTheme();
-
-    const handleSignOut = () => {
-        localStorage.removeItem('aedibus-api-token');
-    }
 
     const dashboard = () => {
         return (
@@ -124,7 +119,7 @@ const Sidebar = (props) => {
                 </div>
                 <Divider />
                 <List>
-                    <ListItem button key={"Sign out"} onClick={handleSignOut}>
+                    <ListItem button key={"Sign out"} onClick={signOut}>
                         <ListItemIcon><EmojiPeopleIcon/></ListItemIcon>
                         <ListItemText primary={"Sign out"} />
                     </ListItem>

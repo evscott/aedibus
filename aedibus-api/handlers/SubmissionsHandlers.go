@@ -66,13 +66,114 @@ func (c *Config) SubmitSolution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	submissionResponse := &models.CreateSubmissionResponse{
+	submissionResponse := &models.CreateSubmissionResultsResponse{
 		ID:           submission.ID,
 		AssignmentId: submission.AssignmentId,
 		StudentId:    submission.StudentId,
 	}
 
 	render.JSON(w, r, submissionResponse)
+}
+
+func (c *Config) GetSubmissionForTeacher(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Requesting GetSubmissionForTeacher")
+
+	submissionId, err := getURLQuery("id", r)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	// Get submission
+	submission, err := c.DAL.GetSubmission(submissionId)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	user, err := c.DAL.GetUserById(submission.StudentId)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	getSubmissionResponse := &models.GetSubmissionResponse{
+		ID:           submission.ID,
+		AssignmentId: submission.AssignmentId,
+		StudentId:    submission.StudentId,
+		UserID:       user.ID,
+		UserName:     user.Name,
+	}
+
+	render.JSON(w, r, getSubmissionResponse)
+}
+
+func (c *Config) GetSubmissionByAssignmentID(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Requesting GetSubmissionByAssignmentID")
+
+	userID := r.Context().Value("userID").(string)
+
+	assignmentId, err := getURLQuery("id", r)
+	if err != nil {
+		render.Status(r, 404)
+		render.JSON(w, r, &models.GetSubmissionResponse{})
+		return
+	}
+
+	// Get submission and test results
+	submission, err := c.DAL.GetSubmissionByAssignmentId(assignmentId, userID)
+	if err != nil && err.Error() == "pg: no rows in result set" {
+		render.Status(r, 404)
+		render.JSON(w, r, err)
+		return
+	}
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	getSubmissionResponse := &models.GetSubmissionResponse{
+		ID:           submission.ID,
+		AssignmentId: submission.AssignmentId,
+		StudentId:    submission.StudentId,
+	}
+
+	render.JSON(w, r, getSubmissionResponse)
+}
+
+func (c *Config) GetSubmissionSolution(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Requesting GetSubmissionSolution")
+
+	submissionId, err := getURLQuery("id", r)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	// Get submission and test results
+	submission, err := c.DAL.GetSubmission(submissionId)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	solution, err := c.FAL.GetSolution(submission.ID, submission.AssignmentId)
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	render.Data(w, r, solution)
 }
 
 func (c *Config) GetSubmissionResults(w http.ResponseWriter, r *http.Request) {
@@ -101,12 +202,9 @@ func (c *Config) GetSubmissionResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getSubmissionResponse := &models.GetSubmissionResponse{
-		ID:           submission.ID,
-		AssignmentId: submission.AssignmentId,
-		StudentId:    submission.StudentId,
-		TestResults:  *testResults,
+	getSubmissionResultsResponse := &models.GetSubmissionResultsResponse{
+		TestResults: *testResults,
 	}
 
-	render.JSON(w, r, getSubmissionResponse)
+	render.JSON(w, r, getSubmissionResultsResponse)
 }

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SignUpForm(props) {
-    const { toggleSignUp, handleSignUp } = props
+    const { toggleSignUp, signUp } = props
     const classes = useStyles()
 
     const [name, setName] = React.useState('');
@@ -108,7 +108,7 @@ export default function SignUpForm(props) {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={() => handleSignUp(name, email, password)}
+                        onClick={() => signUp(name, email, password)}
                     >
                         Sign Up
                     </Button>

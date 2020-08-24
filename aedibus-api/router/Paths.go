@@ -15,9 +15,13 @@ const (
 
 	TEST_SUITE string = "/testsuite"
 	README     string = "/readme"
+	PARTICIPATION string = "/participation"
 
 	/** Submissions **/
 
 	SOLUTION string = "/solution"
 	RESULTS  string = "/results"
+
+	/** Privilege **/
+	INSTRUCTOR string = "/instructor"
 )
