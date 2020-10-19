@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Sidebar = (props) => {
+const AuthenticatedSidebar = (props) => {
     const { open, toggleOpen, isTeacher, signOut } = props;
     const classes = useStyles();
     const theme = useTheme();
@@ -134,10 +134,10 @@ const Sidebar = (props) => {
     );
 }
 
-Sidebar.propTypes = {
+AuthenticatedSidebar.propTypes = {
     open: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func.isRequired,
     isTeacher: PropTypes.bool.isRequired,
 }
 
-export default Sidebar;
+export default AuthenticatedSidebar;

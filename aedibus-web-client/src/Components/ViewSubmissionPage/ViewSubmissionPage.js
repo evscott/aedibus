@@ -23,7 +23,7 @@ import Divider from "@material-ui/core/Divider";
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {Header, Sidebar} from "../Shared";
+import {Header, AuthenticatedSidebar} from "../Shared";
 import clsx from "clsx";
 import {getAssignment, getReadme, getResults, getSolution, getSubmissionForInstructor} from "../../Services/AedibusAPI";
 
@@ -257,7 +257,7 @@ class ViewSubmissionPage extends Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
-                <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
+                <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open})}>
                     <div className={classes.drawerHeader} />
                     {submissionHeader()}

@@ -1,7 +1,7 @@
 import Header from './Header'
 import Footer from './Footer'
-import SidebarContainer from './SidebarContainer'
+import AuthenticatedSidebar from './AuthenticatedSidebarContainer'
+import UnauthenticatedSidebar from "./UnauthenticatedSidebar";
 
-const Sidebar = SidebarContainer;
 
-export { Header, Footer, Sidebar }
+export { Header, Footer, AuthenticatedSidebar, UnauthenticatedSidebar }

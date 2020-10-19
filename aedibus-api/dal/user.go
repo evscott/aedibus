@@ -6,6 +6,13 @@ func (d *Config) CreateUser(user *models.User) error {
 	return d.db.Insert(user)
 }
 
+func (d *Config) EmailIsTaken(email string) (bool, error) {
+	count, err := d.db.Model(&models.User{}).
+		Where("email = ?", email).
+		Count()
+	return count != 0, err
+}
+
 func (d *Config) GetUserByEmailAndPassword(user *models.User) error {
 	return d.db.Model(user).
 		Where("email = ?email").

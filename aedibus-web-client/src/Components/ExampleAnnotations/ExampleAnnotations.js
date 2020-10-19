@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import CheckIcon from '@material-ui/icons/Check';
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Header, Sidebar} from "../Shared";
+import {Header, AuthenticatedSidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -251,7 +251,7 @@ class ExampleAnnotations extends Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
-                <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
+                <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
                     <div className={classes.drawerHeader} />
                     {createAssignmentHeader()}

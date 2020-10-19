@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Fab from "@material-ui/core/Fab";
-import {Footer, Header, Sidebar} from "../Shared";
+import {Footer, Header, AuthenticatedSidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -324,7 +324,7 @@ class CreateCoursePage extends Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
-                <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
+                <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
                     <div className={classes.drawerHeader} />
                     {createCourseHeader()}

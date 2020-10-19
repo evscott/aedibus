@@ -19,7 +19,7 @@ const AuthenticatedRoute = ({ component: Component, ...rest}) => {
 const UnauthenticatedRoute = ({ component: Component, ...rest}) => {
     return <Route
         {...rest}
-        render={props => localStorage.getItem("aedibus-api-token") ? <Redirect to={'/home'}/> : <Component {...props}/> }
+        render={props => !localStorage.getItem("aedibus-api-token") ? <Component {...props}/> : <Redirect to={'/home'}/> }
     />
 };
 

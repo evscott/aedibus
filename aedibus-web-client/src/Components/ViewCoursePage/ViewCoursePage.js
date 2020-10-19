@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Footer, Header, Sidebar} from "../Shared";
+import {Footer, Header, AuthenticatedSidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
@@ -197,7 +197,7 @@ class ViewCoursePage extends Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
-                <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
+                <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
                     <div className={classes.drawerHeader} />
                     {courseTitle()}

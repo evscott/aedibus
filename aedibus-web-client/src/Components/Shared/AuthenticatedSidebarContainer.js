@@ -1,11 +1,9 @@
 import { connect } from 'react-redux'
-import Sidebar from "./Sidebar";
+import AuthenticatedSidebar from "./AuthenticatedSidebar";
 import {signOut} from "../../Redux/Actions/authActions";
 
 const mapStateToProps = (state) => {
-    return {
-        isAuthenticated: state.auth.isAuthenticated,
-    }
+    return {}
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -16,9 +14,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const SidebarContainer = connect(
+const AuthenticatedSidebarContainer = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Sidebar);
+)(AuthenticatedSidebar);
 
-export default SidebarContainer;
+export default AuthenticatedSidebarContainer;

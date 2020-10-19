@@ -2,8 +2,10 @@ import fetch from "cross-fetch";
 
 export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
+export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
 export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
@@ -29,6 +31,17 @@ function signInSuccess(user) {
             teacher: user.teacher,
             admin: user.admin
         },
+        error: null,
+    }
+}
+
+function signInFailure(error) {
+    return {
+        type: SIGN_IN_FAILURE,
+        lastUpdated: Date.now(),
+        isAuthenticated: false,
+        isFetching: false,
+        error: error
     }
 }
 
@@ -37,7 +50,7 @@ function signUpRequest() {
         type: SIGN_UP_REQUEST,
         lastUpdated: Date.now(),
         isAuthenticated: true,
-        isFetching: true
+        isFetching: true,
     }
 }
 
@@ -54,6 +67,16 @@ function signUpSuccess(user) {
             teacher: user.teacher,
             admin: user.admin
         },
+    }
+}
+
+function signUpFailure(error) {
+    return {
+        type: SIGN_UP_FAILURE,
+        lastUpdated: Date.now(),
+        isAuthenticated: false,
+        isFetching: false,
+        error: error
     }
 }
 
@@ -88,27 +111,47 @@ export function signIn(email, password) {
             email: email,
             password: password,
         }
-        
+
         fetch('http://127.0.0.1:2020/auth', {
             headers: {
                 'Content-Type': 'application/json',
             },
             method: 'PUT',
             body: JSON.stringify(payload),
-        }).then((response) => response.json())
-        .then((json) => {
+        }).then(res => {
+            if (res.ok)
+                return res.json()
+            else
+                throw new Error(String(res.status))
+        })
+        .then(json => {
             localStorage.setItem('aedibus-api-token', json.token);
             dispatch(signInSuccess(json));
+        }).catch(err => {
+            let responseStatus = Number(err.message);
+            let message;
+
+            if (responseStatus === 404) {
+                message = "Invalid email/password combination"
+            } else {
+                message = "Oops. Try again"
+            }
+
+            dispatch(signInFailure({
+                timestamp: Date.now(),
+                code: responseStatus,
+                message: message,
+            }));
         })
     }
 }
 
-export function signUp(name, email, password) {
+export function signUp(firstName, lastName, email, password, isTeacher) {
     return (dispatch) => {
         dispatch(signUpRequest());
 
         let payload = {
-            name: name,
+            name: firstName,
             email: email,
             password: password,
         }
@@ -119,11 +162,31 @@ export function signUp(name, email, password) {
             },
             method: 'POST',
             body: JSON.stringify(payload),
-        }).then((response) => response.json())
-        .then((json) => {
-            localStorage.setItem('aedibus-api-token', json.token);
-            dispatch(signUpSuccess(json));
-        })
+        }).then(res => {
+            console.log("this res", res);
+            if (res.ok)
+                return res.json()
+            else
+                throw new Error(res.status)
+            }).then(json => {
+                localStorage.setItem('aedibus-api-token', json.token);
+                dispatch(signUpSuccess(json));
+            }).catch(err => {
+                let responseStatus = Number(err.message);
+                let message;
+
+                if (responseStatus === 409) {
+                    message = "That email is already taken! Try using another one?"
+                } else {
+                    message = "Oops. Try again"
+                }
+
+                dispatch(signUpFailure({
+                    timestamp: Date.now(),
+                    code: responseStatus,
+                    message: message,
+                }));
+            });
     }
 }
 

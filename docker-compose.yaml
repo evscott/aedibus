@@ -27,26 +27,6 @@ services:
     volumes:
       - assignments:/app/assignments
 
-  aedibus-web-client:
-    container_name: aedibus-web-client
-    image: aedibus-web-client:latest
-    hostname: aedibus-web-client
-    build:
-      context: aedibus-web-client/
-      dockerfile: Dockerfile
-    environment:
-      GET_HOSTS_FROM: dns
-    networks:
-      - aedibus-net
-    ports:
-      - 3030:3030
-    depends_on:
-      - aedibus-api
-    links:
-      - aedibus-api
-    labels:
-      kompose.service.type: LoadBalancer
-
   jenkins:
     container_name: jenkins
     image: jenkinsci/blueocean

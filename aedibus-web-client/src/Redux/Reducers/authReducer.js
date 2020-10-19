@@ -39,6 +39,13 @@ const authReducer = (state = initialState, action) => {
                 isFetching: action.isFetching,
                 user: action.user
             };
+        case AuthActions.SIGN_UP_FAILURE:
+            return {
+                ...state,
+                lastUpdated: action.lastUpdated,
+                isAuthenticated: action.isAuthenticated,
+                isFetching: action.isFetching,
+            };
         case AuthActions.LOGOUT_REQUEST:
             return {
                 ...state,

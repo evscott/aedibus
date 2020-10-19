@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
     return {
         isAuthenticated: state.auth.isAuthenticated,
         isFetching: state.auth.isFetching,
+        error: state.error,
     }
 };
 
@@ -15,8 +16,8 @@ const mapDispatchToProps = (dispatch) => {
         signIn: (email, password) => {
             dispatch(signIn(email, password));
         },
-        signUp: (name, email, password) => {
-            dispatch(signUp(name, email, password));
+        signUp: (firstName, lastName, email, password, isTeacher) => {
+            dispatch(signUp(firstName, lastName, email, password, isTeacher));
         },
     };
 };

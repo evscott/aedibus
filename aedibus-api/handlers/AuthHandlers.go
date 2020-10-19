@@ -20,7 +20,19 @@ func (c *Config) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := &models.User{
+	taken, err := c.DAL.EmailIsTaken(signUpRequest.Email)
+	if taken {
+		render.Status(r, 409)
+		render.JSON(w, r, err)
+		return
+	}
+	if err != nil {
+		render.Status(r, 500)
+		render.JSON(w, r, err)
+		return
+	}
+
+	user := &models.User {
 		Name:     signUpRequest.Name,
 		Email:    signUpRequest.Email,
 		Password: signUpRequest.Password,
@@ -58,7 +70,7 @@ func (c *Config) SignIn(w http.ResponseWriter, r *http.Request) {
 	signInRequest := &models.SignInRequest{}
 	err := decodeRequestBody(signInRequest, r)
 	if err != nil {
-		render.Status(r, 500)
+		render.Status(r, 400)
 		render.JSON(w, r, err)
 		return
 	}
@@ -70,7 +82,7 @@ func (c *Config) SignIn(w http.ResponseWriter, r *http.Request) {
 
 	err = c.DAL.GetUserByEmailAndPassword(user)
 	if err != nil {
-		render.Status(r, 500)
+		render.Status(r, 404)
 		render.JSON(w, r, err)
 		return
 	}

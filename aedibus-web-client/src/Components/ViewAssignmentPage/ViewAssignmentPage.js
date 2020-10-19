@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react'
 import clsx from 'clsx';
 import PropTypes from 'prop-types'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import {Footer, Header, Sidebar} from "../Shared";
+import {Footer, Header, AuthenticatedSidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "ace-builds/src-noconflict/mode-java";
@@ -149,7 +149,7 @@ class ViewAssignmentPage extends Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
-                <Sidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
+                <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open})}>
                     <div className={classes.drawerHeader} />
                     {assignmentHeader()}
