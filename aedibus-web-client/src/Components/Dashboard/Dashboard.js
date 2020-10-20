@@ -1,22 +1,20 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import clsx from 'clsx';
 import PropTypes from 'prop-types'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Grid from '@material-ui/core/Grid'
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import {Footer, Header, AuthenticatedSidebar} from "../Shared";
+import {Header, AuthenticatedSidebar} from "../Shared";
 import { withStyles } from '@material-ui/core/styles';
-import Paper from "@material-ui/core/Paper";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import SchoolIcon from '@material-ui/icons/School';
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
 import {getCoursesForStudent, getCoursesForTeacher} from "../../Services/AedibusAPI";
+import TaskListHeader from "./TaskListHeader";
+import Grid from "@material-ui/core/Grid";
+import CreateNote from "./CreateNote";
+import CalendarIcon from "react-calendar-icon";
+import Paper from "@material-ui/core/Paper";
+import Divider from "@material-ui/core/Divider";
+import TaskList from "./TaskList";
 
 const drawerWidth = 240;
 
@@ -24,7 +22,7 @@ const styles = theme => ({
     root: {
         display: 'flex',
     },
-    drawerHeader: {
+    main: {
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 1),
@@ -64,6 +62,9 @@ const styles = theme => ({
     },
     title: {
         textAlign: 'center',
+    },
+    taskListHeight: {
+        height: 530,
     }
 });
 
@@ -102,62 +103,6 @@ class Dashboard extends Component {
     render() {
         const { classes } = this.props;
 
-        const dashboardHeader = () => {
-            return (
-                <div className={classes.dashboardMargins}>
-                    <Grid container>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h3" className={classes.title} color={'textPrimary'}>
-                                Dashboard
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </div>
-            )
-        }
-
-        const coursesHeader = () => {
-            return (
-                <div className={classes.dashboardMargins}>
-                    <Grid container>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h4" className={classes.title} color={'textSecondary'}>
-                                Course List
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </div>
-            )
-        }
-
-        const courseList = () => {
-            return (
-                <div className={classes.dashboardMargins}>
-                    <Grid container>
-                        <Grid item md={2} lg={3}/>
-                        <Grid item xs={12} md={8} lg={6}>
-                            <Paper elevation={3}>
-                                <List className={classes.courseList}>
-                                    {this.state.courseList.map((course) => (
-                                        <Fragment key={course.ID}>
-                                            <ListItem key={course.ID} button component={'button'} href={`/courses/view/${course.ID}`}>
-                                                <ListItemIcon>
-                                                    <SchoolIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={course.Title} secondary={course.Description}/>
-                                            </ListItem>
-                                            <Divider light/>
-                                        </Fragment>
-                                    ))}
-                                </List>
-                            </Paper>
-                        </Grid>
-                        <Grid item md={2} lg={3}/>
-                    </Grid>
-                </div>
-            );
-        }
-
         const createCourseButton = () => {
             if (this.props.user && this.props.user.teacher)
                 return (
@@ -175,13 +120,28 @@ class Dashboard extends Component {
                 <Header open={this.state.open} toggleOpen={this.toggleOpen}/>
                 <AuthenticatedSidebar open={this.state.open} toggleOpen={this.toggleOpen} isTeacher={this.props.user ? this.props.user.teacher : false}/>
                 <main className={clsx(classes.content, {[classes.contentShift]: this.state.open,})}>
-                    <div className={classes.drawerHeader} />
-                    {dashboardHeader()}
-                    {coursesHeader()}
-                    {courseList()}
+                    <div className={classes.main} />
+                    <Grid container spacing={1}>
+                        <Grid item xs={1} sm={2} md={3} lg={4}/>
+                        <Grid item xs={10} sm={8} md={6} lg={4}>
+                            <CreateNote/>
+                        </Grid>
+                        <Grid item xs={1} sm={2} md={3} lg={4}/>
+                        <Grid item xs={1} sm={2} md={3} lg={4}/>
+                        <Grid item xs={10} sm={8} md={6} lg={4}>
+                            <TaskListHeader/>
+                        </Grid>
+                        <Grid item xs={1} sm={2} md={3} lg={4}/>
+                        <Grid item sm={1} md={2} lg={3}/>
+                        <Grid item xs={12} sm={10} md={8} lg={6}>
+                            <div className={classes.taskListHeight}>
+                                <TaskList/>
+                            </div>
+                        </Grid>
+                        <Grid item sm={1} md={2} lg={3}/>
+                    </Grid>
                     {createCourseButton()}
                 </main>
-                {/*<Footer/>*/}
             </div>
         )
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -71,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
     const { open, toggleOpen } = props;
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -91,7 +90,7 @@ const Header = (props) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography variant="h5" noWrap>
                         Aedibus
                     </Typography>
                 </Toolbar>
